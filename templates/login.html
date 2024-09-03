@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            /* margin-bottom: 20px; */
+            text-align: center;
+            font-size: 60px;
+            color: rgb(139, 177, 230);
+            margin-bottom: 60px;
+        }
+        .login-container {
+            background-color: rgb(247, 248, 235);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 25%;
+            text-align: center;
+        }
+        .login-container h2 {
+            /* margin-bottom: 20px; */
+            text-align: center;
+            color: rgb(139, 177, 230);
+            font-size: 30px;
+        }
+        .login {
+            width: 35%;
+            /* height: 38px; */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login:hover {
+            background-color: rgb(102, 141, 201);
+        }
+       
+
+
+        /* .login-container button:hover {
+            color: rgb(255, 255, 255);
+        } */
+
+        /* .user-type {
+            position: relative;
+            width: calc(100% - 20px);
+            margin: 10px 0;
+        } */
+        .login-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color:rgb(105, 135, 179);
+            font-weight: 550;
+        }
+
+        .radio-type {
+            display: flex;
+            justify-content: right;
+            /* margin: 8px 0; */
+            margin-bottom: 40px;
+
+        }
+        .radio-type label {
+            /* margin: 15px; */
+            font-size:14px;
+            font-weight:bold;
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            color: rgb(139, 177, 230); /* 设置标签颜色为蓝色 */
+            white-space: nowrap; 
+
+        }
+  
+        .radio-type label span {
+            margin-left: 5px;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%; /* 与输入框宽度保持一致 */
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            /* padding-right: 40px;  */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: rgb(139, 177, 230);
+            font-weight: 550;
+        }
+
+        /* 隐藏/显示密码按钮 */
+        .toggle-password {
+            position: absolute;
+            right: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .toggle-password {
+            width: 14%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: transparent;
+            color: rgb(139, 177, 230);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+       
+        .login-container .footer-links {
+            margin-top: 18px;
+            display: flex;
+            font-size:12px;
+            margin-left: 60%;
+            justify-content: space-between;
+        }
+        .login-container .footer-links a {
+            color: rgb(114, 155, 212);
+            font-weight: 530;
+            text-decoration: none;
+        }
+        .login-container .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>阿尔兹海默症测试系统</h1>
+    </div>
+
+    <div class="login-container">
+        <h2>登录</h2>
+        <!-- <form action="/login/" method="post"> -->
+        <form action="" method="post">
+
+            {% csrf_token %}
+            <div class="user-type">
+                <input type="text" name="id" placeholder="账号" value="{{ id }}" required>
+                <!-- <button type="button" onclick="document.getElementById('id').value = ''">&times;</button> -->
+            </div>
+
+            <!-- <input type="password" name="password" placeholder="密码" required> -->
+            <div class="password-wrapper">
+                <input type="password" name="password" id="password" placeholder="密码" required>
+                <!-- <input type="password" id="orpassword" name="orpassword" required> -->
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password')">
+                    <i class="fa fa-eye"></i>
+                </button>
+                    
+            </div>
+            
+            <!-- <input type="checkbox" id="show-password" onclick="togglePassword()"> -->
+
+            <div class="radio-type">
+                <label>
+                    <input type="radio" name="user-type" value="admin" required> 管理员
+                </label>
+                <label>
+                    <input type="radio" name="user-type" value="user" required> 用户
+                </label>
+            </div>
+            <button class="login" type="submit">登录</button>
+        </form>
+        <div class="footer-links">
+            <a href="register">还没有账号？点击去注册</a>
+            <!-- <a href="#">忘记密码</a> -->
+        </div>
+        <!-- 登录 -->
+        <div id="messages" style="display: none;">
+            {% if messages %}
+                {% for message in messages %}
+                    <span class="message" data-type="{{ message.tags }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#messages .message').each(function() {
+                // var messageType = $(this).data('type');
+                var messageText = $(this).text();
+                alert(messageText);
+            });
+        });
+    </script>
+
+    <script>
+        // function togglePassword() {
+        //     var passwordField = document.getElementById("password");
+        //     var showPasswordCheckbox = document.getElementById("show-password");
+        //     if (showPasswordCheckbox.checked) {
+        //         passwordField.type = "text";
+        //     } else {
+        //         passwordField.type = "password";
+        //     }
+        // }
+
+        function togglePasswordVisibility(inputId) {
+            var input = document.getElementById(inputId);
+            var icon = input.nextElementSibling.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title>用户测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            margin: 0;
+            padding: 20px;
+            height: 100%;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            /* background-color: rgb(247, 248, 235); */
+
+        }
+        .test-section {
+            /* background-color: white; */
+            background-color: rgb(247, 248, 235);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            margin-bottom: 30px;
+            min-width: 300px;
+        }
+        .test-section h2 {
+            margin-bottom: 20px;
+            color: rgb(139, 177, 230);
+        }
+        .head {
+            display: flex;
+            align-items: center; /* 垂直对齐 */
+            justify-content: space-between; /* 水平对齐 */
+            margin-bottom: 10px;
+        }
+
+        .date {
+            margin-left: auto; /* 自动填充左边距以右对齐 */
+        }
+
+        .date label {
+            color: #999b9c;
+            margin-right: 10px; 
+        }
+        .image-description img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .questionnaire img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            /* margin-bottom: 10px; */
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .audio-button {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .audio-button button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+        .questionnaire p {
+            font-size: medium;
+            color: #999b9c;
+            /* margin-bottom: 20px; */
+            /* margin-top: 10px; */
+            margin-left: 68%;
+        }
+
+        .questionnaire form div {
+            margin-bottom: 15px;
+        }
+        
+        .questionnaire input, .questionnaire textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #a0a2a2;
+            border-radius: 4px;
+        }
+        .submit-btn, .record-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 100px;
+        }
+        .submit-btn:disabled, .record-btn:disabled {
+            background-color: #c2c2c3;
+        }
+        .timer {
+            margin-top: 10px;
+            font-size: 1.2em;
+            text-align: center;
+            color: rgb(139, 177, 230);
+        }
+        /* .mine {
+            display: flex;
+            flex-direction: row;
+        } */
+        .mine a {
+           
+            font-size: medium;
+            margin-left: 94%;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: rgb(139, 177, 230);
+        }
+
+        .floating-button {
+            position: fixed;
+            top: 88%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: rgb(139, 177, 230);
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px 0 0 20px;
+            text-align: center;
+            outline: none;
+            font-size: 15px;
+            z-index: 1000;
+            transition: right 0.2s;
+        }
+
+        .floating-button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+        .content {
+            position: fixed;
+            top: 77%;
+            right: 4px;
+            transform: translateY(-50%);
+            padding: 10px;
+            width: 235px;
+            display: none;
+            overflow: hidden;
+            background-color: rgb(247, 248, 235);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 999;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content p {
+            margin: 5px;
+            margin-top: 22px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background-color: #f775a4;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="mine">
+        <!-- <p id="name">{{ id }}</p> -->
+        <a id="changePage" href="mine">个人中心</a>
+    </div>
+    <div class="container">
+        <div class="test-section image-description">
+            <div class="head">
+                <h2>据图描述</h2>
+                <div class="date">
+                    <label for="testdate0">测试日期:</label>
+                    <input type="date" id="testdate0" name="testdate0" required>
+                </div>
+                
+            </div>
+            <img src="../static/img/cookie-theft-picture.png" alt="描述图片">
+            <div class="button-container">
+                <!-- <form method="post" enctype="multipart/form-data"> -->
+
+                <!-- <form method="post" enctype="multipart/form-data"> -->
+                    <div class="timer" id="timer1">录音时间: 00:00</div>
+                    <audio id="audioPlayback1" controls style="display: none;"></audio>
+                    <div class="audio-button">
+                        <button class="record-btn" onclick="startRecording(1)">开始录音</button>
+                        <button class="record-btn" onclick="stopRecording(1)" disabled>停止录音</button>
+                        
+                            {% csrf_token %}
+                            <button class="submit-btn" onclick="submitRecording(1)" disabled>提交</button>
+                        <!-- </form> -->
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>
+        <div class="test-section questionnaire">
+            <h2>问卷测试（MMSE）</h2>
+            <a href="questionMMSE">
+                <img src="../static/img/question.png" alt="点击图片进入问卷测试">
+            </a>
+            <p>点击上方图片进入问卷测试</p>
+            <button class="floating-button">关于MMSE</button>
+            <div class="content">
+                <button class="close-btn">&times;</button>
+                <p>MMSE（Mini-Mental State Examination，即简短智能状态检查）是一种广泛用于评估认知功能的工具，尤其在阿尔茨海默病（AD）患者中应用广泛。MMSE主要通过一系列问题和任务评估患者的定向力、记忆力、注意力、计算能力、语言能力和执行能力。其对于阿尔茨海默病的早期诊断、疾病进展评估、治疗效果评估和临床研究具有重要作用。</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // document.getElementById('changePage').addEventListener('click', function(event) {
+        //     const username = document.getElementById('name').value;
+        //     this.href = `page2.html?username=${encodeURIComponent(username)}`;
+        // });
+
+
+        // 获取今天的日期
+        let today = new Date().toISOString().substr(0, 10); // 格式为 YYYY-MM-DD
+
+        // 将今天的日期设置为输入框的默认值
+        document.getElementById("testdate0").value = today;
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+            if (csrfTokenMeta) {
+                window.csrfToken = csrfTokenMeta.getAttribute('content');
+            } else {
+                console.error('CSRF token not found.');
+            }
+        });
+
+        //录音及计时逻辑
+        let mediaRecorders = {};
+        let audioChunks = {};
+        let timerIntervals = {};
+        let seconds = {};
+
+        function startRecording(id) {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorders[id] = new MediaRecorder(stream);
+                    mediaRecorders[id].start();
+                    audioChunks[id] = [];
+
+                    mediaRecorders[id].addEventListener("dataavailable", event => {
+                        audioChunks[id].push(event.data);
+                    });
+
+                    mediaRecorders[id].addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks[id], { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audio = document.getElementById(`audioPlayback${id}`);
+                        audio.src = audioUrl;
+                        audio.style.display = 'block';
+
+                        document.querySelector(`.test-section:nth-child(${id}) .submit-btn`).disabled = false;
+                        clearInterval(timerIntervals[id]);  // 清除计时器
+                    });
+
+                    document.querySelector(`.test-section:nth-child(${id}) .record-btn[onclick="startRecording(${id})"]`).disabled = true;
+                    document.querySelector(`.test-section:nth-child(${id}) .record-btn[onclick="stopRecording(${id})"]`).disabled = false;
+                    startTimer(id);  // 启动计时器
+                })
+                .catch(error => {
+                    console.error('Error accessing media devices.', error);
+                });
+        }
+
+        function startTimer(id) {
+            seconds[id] = 0;  // 重置秒数
+            timerIntervals[id] = setInterval(() => {
+                seconds[id]++;
+                document.getElementById(`timer${id}`).textContent = `录音时间: ${formatTime(seconds[id])}`;
+            }, 1000);  // 每秒更新一次
+        }
+
+        function stopRecording(id) {
+            if (mediaRecorders[id]) {
+                mediaRecorders[id].stop();
+                document.querySelector(`.test-section:nth-child(${id}) .record-btn[onclick="startRecording(${id})"]`).disabled = false;
+                document.querySelector(`.test-section:nth-child(${id}) .record-btn[onclick="stopRecording(${id})"]`).disabled = true;
+                clearInterval(timerIntervals[id]);  // 确保停止录音时清除计时器
+                document.getElementById(`timer${id}`).textContent = `录音时间: ${formatTime(seconds[id])}`;
+            }
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function submitRecording(id) {
+            const formData = new FormData();
+            // formData.append('testId', '{{ id }}');
+            formData.append('testDate', document.getElementById('testdate0').value);
+            formData.append('audio', new Blob(audioChunks[id], { type: 'audio/wav' }), 'recording.wav');
+
+            fetch('/user_func/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken // 添加 CSRF Token
+                },
+                body: formData
+            })
+            .then(response => response.json())  // 解析 JSON 响应
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('录音提交成功!');
+                } else {
+                    alert(`录音提交失败: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('录音提交失败!');
+            });
+        }
+
+
+
+
+        //折叠按钮
+        document.addEventListener('DOMContentLoaded', (event) => {
+        var button = document.querySelector(".floating-button");
+        var content = document.querySelector(".content");
+        var closeBtn = document.querySelector(".close-btn");
+
+        button.addEventListener("click", function() {
+            content.style.display = "block";
+            button.style.right = "250px"; // 将按钮移动到左边，以便为内容腾出空间
+        });
+
+        closeBtn.addEventListener("click", function() {
+            content.style.display = "none";
+            button.style.right = "0";
+        });
+
+        // Close the content when clicking outside of it
+        window.addEventListener("click", function(event) {
+            if (!button.contains(event.target) && !content.contains(event.target)) {
+                content.style.display = "none";
+                button.style.right = "0";
+            }
+        });
+    });
+
+
+
+    </script>
+</body>
+</html>

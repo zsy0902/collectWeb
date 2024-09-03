@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>管理员页面</title>
+    <style>
+        body {
+            background-color: #fafce0;
+        }
+        a {
+            color: rgb(139, 177, 230);
+        }
+        .edit a {
+           font-size: medium;
+           margin-left: 94%;
+           font-weight: 500;
+           margin-bottom: 20px;
+           color: rgb(139, 177, 230);
+       }
+
+        .title_items {
+            display: flex;
+            flex-direction: row;
+            /* width: 60%; */
+            /* position: relative; */
+            margin: 0 auto;
+        }
+
+        .addUserButton {
+            width: 25%; 
+            /* margin-left: 20%; */
+            height: 35px;
+            /* height: 38px; */
+            /* padding: 4px; */
+            border: none;
+            border-radius: 14px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: small;
+            cursor: pointer;
+       }
+
+        .search_form {
+            width: 65%;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: row;
+            position: relative;
+        }
+
+        .search_form input, .search_form button {
+            border: none;
+            outline: none;
+        }
+
+        .search_form input {
+            width: 21%;
+            height: 30px;
+            padding-left: 10px;
+            margin-left: 65%;
+            padding-right: 60px;
+            color: rgb(139, 177, 230);
+            border: 2px solid rgb(139, 177, 230);
+            border-radius: 12px;
+            background: transparent;
+        }
+
+        .search_form input::placeholder {
+            color: rgb(139, 177, 230);
+        }
+
+        .search {
+            height: 35px;
+            width: 52px;
+            cursor: pointer;
+            position: absolute;
+            right: 1.4%;
+            background: rgb(139, 177, 230);
+            color: white;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .search_form button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+       h1 {
+            color: rgb(139, 177, 230);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 65%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #f7f8eb;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table a {
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: center;
+            color: rgb(139, 177, 230);
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+     
+        .popup-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(195, 215, 242);
+            color: white;
+            padding: 15px;
+            /* width: 150px; */
+            font-weight: 550;
+            border-radius: 15px;
+            z-index: 1000;
+            font-size: 16px;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 1s ease-in-out; /* 添加过渡效果 */
+        }
+        
+        .popup-message.fade-out {
+            opacity: 0; /* 设置为完全透明 */
+        }
+
+        /* 模态框整体布局 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed; /* 固定在屏幕位置 */
+            z-index: 1; /* 位于页面顶层 */
+            left: 0;
+            top: 0; /* 固定在屏幕顶部 */
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* 允许滚动 */
+            background-color: rgba(0, 0, 0, 0.4); /* 背景半透明 */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 0 auto; /* 水平居中 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%; /* 宽度可根据需要调整 */
+            top: 0; /* 内容从顶部开始 */
+        }
+
+
+        .modal h2 {
+            color: rgb(139, 177, 230);
+            margin-bottom: 35px;
+            text-align: center;
+        }
+        .modal select {
+            margin-bottom: 15px;
+            padding: 10px;
+            width: 50%;
+            color: rgb(139, 177, 230);
+            border: 1px solid #ccc;
+            border-radius: 14px;
+            font-weight: 550;
+
+        }
+        
+        /* 关闭按钮 */
+        .close, .close1 {
+            color: rgb(139, 177, 230);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close1:hover,
+        .close:focus, .close1:focus {
+            color: rgb(63, 95, 142);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        /* 设置提示框居中和样式 */
+        .upload {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            z-index: 1000;
+            width: 300px;
+        }
+
+        /* 标签和输入框的样式 */
+        .upload label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 550;
+            font-size: 16px;
+            color: rgb(139, 177, 230);
+        }
+
+        .upload input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #5f6479;
+            box-sizing: border-box;
+        }
+
+        /* 按钮容器 */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 提交和取消按钮样式 */
+        .upload button {
+            padding: 7px 14px;
+            font-size: 12px;
+            border: none;
+            margin: 0 30px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #submitUserButton {
+            background-color: rgb(139, 177, 230); 
+            color: white;
+        }
+        #submitUserButton:hover {
+            background-color: rgb(122, 155, 201); 
+        }
+
+        #cancelButton {
+            background-color: #aeafb3; 
+            color: white;
+        }
+        #cancelButton:hover {
+            background-color: #959596; 
+        }
+
+        /* 在较小屏幕上的自适应样式 */
+        @media (max-width: 400px) {
+            .upload {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .upload button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .upload button:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        #errorMessage {
+            color: rgb(83, 85, 87);
+            margin: 30px;
+            font-weight: 550;
+            font-size: larger;
+        }
+
+        #closeErrorButton {
+            background-color: rgb(139, 177, 230); 
+            color: white;
+        }
+
+        /* 表单组 */
+        /* 表单组 */
+        .form-group {
+            margin-bottom: 15px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 水平居中 */
+            
+        }
+
+        /* 标签样式 */
+        .form-group label {
+            color: rgb(101, 103, 105);
+            text-align: right; /* 右对齐标签 */
+            margin-right: 10px;
+            font-weight: 550;
+            width: 26%; /* 标签宽度，根据需要调整 */
+        }
+
+        /* 输入框和下拉框样式 */
+        .form-group input,
+        .form-group select {
+            width: 45%; /* 输入框和下拉框宽度，根据需要调整 */
+            padding: 10px;
+            text-align: left; /* 输入框和下拉框内容左对齐 */
+            border: 1px solid #ccc;
+            border-radius: 14px;
+            font-weight: 500;
+            color: rgb(114, 115, 118);
+        }
+
+
+        .form-group button {
+            background-color: rgb(139, 177, 230);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 30%;
+            margin-top: 15px;
+            align-items: center;
+            /* margin-left: 35%; */
+        }
+
+        .form-group button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="edit">
+        <a href="admin_edit">修改密码</a>
+    </div>
+    <h1>用户列表</h1>
+    <div class="title_items">
+        <form class="search_form" method="GET" action="{% url 'adminFunc' %}">
+            <button id="addUserButton" class="addUserButton">上传用户测试信息</button>
+            <input type="text" name="q" placeholder="搜索用户姓名" {% if query %}value="{{ query }}"{% endif %}>
+            <button type="submit" class="search">搜索</button>
+        </form>
+    </div>
+    <form method="POST" action="{% url 'adminFunc' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th style="color: rgb(54, 91, 143);">账号</th>
+                <th style="color: rgb(54, 91, 143);">姓名</th>
+                <th style="color: rgb(54, 91, 143);">性别</th>
+                <th style="color: rgb(54, 91, 143);">出生日期</th>
+                <th style="color: rgb(54, 91, 143);">电话</th>
+                <th style="color: rgb(54, 91, 143);">操作</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.gender }}</td>
+                <td>{{ user.age }}</td>
+                <td>{{ user.phonenumber }}</td>
+                <td>
+                    <a href="{% url 'user_detail' user.id %}">查看</a>
+
+                    <a href="#" class="edit-btn" data-id="{{ user.id }}" 
+                    data-name="{{ user.name }}" data-gender="{{ user.gender }}" data-age="{{ user.age }}" data-phonenumber="{{ user.phonenumber }}" 
+                    data-education="{{ user.education }}" data-exercise="{{ user.workout }}" data-reading_writing="{{ user.readnwrite }}" 
+                    data-sleeping="{{ user.sleeping }}" data-smoking="{{ user.smoking }}" 
+                    data-diet="{{ user.diet }}" data-living="{{ user.living }}" data-working="{{ user.working }}" 
+                    data-ADhistory="{{ user.ADhistory }}" data-disease="{{ user.disease }}" data-TBI="{{ user.TBI }}">编辑</a>
+
+                    <a href="{% url 'user_delete' user.id %}"
+                       onclick="return confirm('确定要删除该用户吗？');">删除</a>
+                  
+                    <a href="{% url 'user_reset' user.id %}" onclick="return confirm('确定要重置账号为{{ user.id }}用户的密码吗？');">重置密码</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+
+
+    <!-- 编辑提示框表 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>编辑用户信息</h2>
+            <form id="editForm" method="post" action="{% url 'user_edit' %}">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" id="modalUserId">
+                <div class="form-group">
+                    <label for="modalUserName">姓名:</label>
+                    <input type="text" id="modalUserName" name="name" required>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="modalUserPhoneNumber">电话(11位数字):</label>
+                    <input type="text" id="modalUserPhoneNumber" name="phonenumber" maxlength="11" minlength="11" pattern="[0-9]{11}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modalUserAge">生日:</label>
+                    <input type="date" id="modalUserAge" name="birthdate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserGender">性别:</label>
+                    <select id="modalUserGender" name="gender" required>
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserEducation">学历:</label>
+                    <select id="modalUserEducation" name="education" required>
+                        <option value="">请选择</option>
+                        <option value="无学历">无学历</option>
+                        <option value="小学">小学</option>
+                        <option value="初中">初中</option>
+                        <option value="高中">高中</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                        <option value="博士后">博士后</option>
+                        <option value="科研人员">教授或科研人员</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserExercise">锻炼频率:</label>
+                    <select id="modalUserExercise" name="exercise" required>
+                        <option value="">请选择</option>
+                        <option value="不锻炼">不锻炼</option>
+                        <option value="很少">很少</option>
+                        <option value="偶尔">偶尔</option>
+                        <option value="经常">经常</option>
+                        <option value="频繁">频繁</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalUserReading_writing">读写频率:</label>
+                    <select id="modalUserReading_writing" name="reading_writing" required>
+                        <option value="">请选择</option>
+                        <option value="不读写">不读写</option>
+                        <option value="很少">很少</option>
+                        <option value="偶尔">偶尔</option>
+                        <option value="经常">经常</option>
+                        <option value="频繁">频繁</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalUserSleeping">睡眠情况:</label>
+                    <select id="modalUserSleeping" name="sleeping" required>
+                        <option value="">请选择</option>
+                        <option value="少">&lt;6h</option>
+                        <option value="良好">6-8h</option>
+                        <option value="多">8-10h</option>
+                        <option value="过多">&gt;10h</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserSmoking">是否吸烟:</label>
+                    <select id="modalUserSmoking" name="smoking" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+    
+                <div class="form-group">
+                    <label for="modalUserDiet">饮食是否健康:</label>
+                    <select id="modalUserDiet" name="diet" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>  
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserLiving">居住环境污染:</label>
+                    <select id="modalUserLiving" name="living" required>
+                        <option value="">请选择</option>
+                        <option value="良好">环境良好</option>
+                        <option value="轻度">轻度污染</option>
+                        <option value="中度">中度污染</option>
+                        <option value="重度">重度污染</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserWorking">工作环境污染:</label>
+                    <select id="modalUserWorking" name="working" required>
+                        <option value="">请选择</option>
+                        <option value="良好">环境良好</option>
+                        <option value="轻度">轻度污染</option>
+                        <option value="中度">中度污染</option>
+                        <option value="重度">重度污染</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserADhistory">有无AD遗传病史:</label>
+                    <select id="modalUserADhistory" name="ADhistory" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserDisease">有无心血管疾病:</label>
+                    <select id="modalUserDisease" name="disease" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="modalUserTBI">有无脑外伤史:</label>
+                    <select id="modalUserTBI" name="TBI" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">保存更改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 上传用户信息提示框 -->
+    <div id="userInputModal" style="display:none;" class="upload">
+        <label for="usernameInput">请输入用户账号:</label>
+        <input type="text" id="usernameInput" name="userID"/>
+        <button id="submitUserButton">提交</button>
+        <button id="cancelButton">取消</button>
+    </div>
+    
+    <!-- 提示框 -->
+    <div id="errorModal" class="upload">
+        <span class="close1">&times;</span>
+        <p id="errorMessage"></p>
+        <!-- <button id="closeErrorButton">关闭</button> -->
+    </div>
+
+
+
+    <!-- 弹窗 -->
+    <div class="popup-message" id="popupMessage">
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+
+        // 删除用户/重置密码弹窗
+
+        function showPopupMessage() {
+            var popup = document.getElementById("popupMessage");
+            popup.style.display = "block";
+            setTimeout(function() {
+                popup.classList.add("fade-out"); // 添加淡出效果
+            }, 2000); // 2秒后开始淡出
+            setTimeout(function() {
+                popup.style.display = "none";
+                popup.classList.remove("fade-out"); // 重置类，以便下次可以再次使用淡出效果
+            }, 3000); // 3秒后完全消失
+        }
+
+
+        // 编辑弹窗
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById("editModal");
+            var closeModalBtn = document.getElementsByClassName("close")[0];
+
+            // 获取所有编辑按钮
+            var editBtns = document.getElementsByClassName("edit-btn");
+
+            // 当点击编辑按钮时，打开模态框并填充数据
+            Array.from(editBtns).forEach(function (btn) {
+                btn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    modal.style.display = "block";
+                    document.getElementById("modalUserId").value = this.dataset.id;
+                    document.getElementById("modalUserName").value = this.dataset.name;
+                    document.getElementById("modalUserGender").value = this.dataset.gender;
+                    document.getElementById("modalUserAge").value = this.dataset.age;
+                    document.getElementById("modalUserPhoneNumber").value = this.dataset.phonenumber;
+                    document.getElementById("modalUserEducation").value = this.dataset.education;
+                    document.getElementById("modalUserExercise").value = this.dataset.exercise;
+                    document.getElementById("modalUserReading_writing").value = this.dataset.reading_writing;
+                    document.getElementById("modalUserSleeping").value = this.dataset.sleeping;
+                    document.getElementById("modalUserSmoking").value = this.dataset.smoking;
+                    document.getElementById("modalUserDiet").value = this.dataset.diet;
+                    document.getElementById("modalUserLiving").value = this.dataset.living;
+                    document.getElementById("modalUserWorking").value = this.dataset.working;
+                    document.getElementById("modalUserADhistory").value = this.dataset.adhistory;
+                    document.getElementById("modalUserDisease").value = this.dataset.disease;
+                    document.getElementById("modalUserTBI").value = this.dataset.tbi;
+                });
+            });
+
+            // 当点击关闭按钮时，关闭模态框
+            closeModalBtn.onclick = function () {
+                modal.style.display = "none";
+            };
+
+            // 当点击模态框外部时，关闭模态框
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+        });
+
+
+        // 上传用户信息弹窗
+
+        document.getElementById('addUserButton').addEventListener('click', function() {
+        document.getElementById('userInputModal').style.display = 'block';
+        });
+
+
+        // 获取上传用户信息按钮和提示框
+        const addUserButton = document.getElementById('addUserButton');
+        const uploadModal = document.getElementById('userInputModal'); // 假设这是提示框的ID
+
+        // 阻止表单提交，并显示提示框
+        addUserButton.addEventListener('click', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+            uploadModal.style.display = 'block'; // 显示提示框
+        });
+
+        // 获取关闭按钮
+        const closeModal = document.querySelector('.close');
+        
+        // 点击关闭按钮时隐藏提示框
+        closeModal.addEventListener('click', function() {
+            uploadModal.style.display = 'none';
+        });
+
+    // 点击模态框外部时关闭模态框
+        window.onclick = function(event) {
+            if (event.target == uploadModal) {
+                uploadModal.style.display = 'none';
+            }
+        }
+
+
+
+
+        // 提交按钮点击事件
+        document.getElementById('submitUserButton').addEventListener('click', function() {
+            const username = document.getElementById('usernameInput').value;
+            
+
+            // 通过AJAX发送账号信息到服务器
+            fetch('/admin_func/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ username: username }),
+            })
+            .then(response => response.json())
+            .then(data => {
+            if (data.exists) {
+                window.location.href = `/admin_func/upload_user_info/${username}/`;
+            } else {
+                document.getElementById('userInputModal').style.display = 'none';
+                document.getElementById('errorMessage').innerText = '用户账号不存在!';
+                document.getElementById('errorModal').style.display = 'block';
+            }
+            });
+
+        });
+
+        // 取消按钮点击事件
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            document.getElementById('userInputModal').style.display = 'none';
+        });
+
+        // // 关闭错误提示框
+        var closeModalBtn1 = document.getElementsByClassName("close1")[0];
+        closeModalBtn1.addEventListener('click', function() {
+            // document.getElementById('errorModal').style.display = 'none';
+            var modal = document.getElementById("errorModal");
+            
+
+            closeModalBtn1.onclick = function () {
+                modal.style.display = "none";
+            };
+
+                // 当点击模态框外部时，关闭模态框
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    }
+            };
+
+            
+        });
+        
+
+
+
+
+    </script>
+
+    {% if messages %}
+        <script>
+            showPopupMessage();
+        </script>
+    {% endif %}
+</body>
+</html>

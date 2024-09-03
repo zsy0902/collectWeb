@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息收集页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 92vh;
+        }
+        .user_info {
+            background-color: rgb(247, 248, 235);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 35%;
+            margin: auto;
+            margin-right: 26%;
+            height: auto;
+           
+        }
+        h2 {
+            /* text-align: center; */
+            /* margin-bottom: 20px; */
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            margin-left: 100%;
+            font-size: 50px;
+            width: 160%;
+            color: rgb(139, 177, 230);
+        }
+        /* title {
+            margin-right: 200px; /* Space between h2 and the right container */
+            /* border: 1px solid #000; /* Optional: for better visibility */
+            /* padding: 10px; Optional: for better visibility */ 
+        /* } */ 
+
+        .user_info p {
+            margin-top: 10px;
+            font-size:x-large;
+            color: rgb(139, 177, 230);
+            height: auto;
+            font-weight: 600;
+        }
+
+        .user_info form {
+            display: flex;
+            flex-direction: column;
+            /* margin: 20px; */
+            margin-top: 0px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+        label {
+            margin-bottom: 5px;
+            color: rgb(93, 96, 103);
+        }
+        .user_info input, select {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        /* input[type="submit"] {
+            background-color: rgb(139, 177, 230);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: rgb(102, 141, 201);
+        } */
+
+        .user_info button {
+            width: 40%;
+            /* height: 38px; */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            /* place-items: center; */
+            margin: auto;
+            margin-top: 30px;
+            display: grid;
+            
+        }
+
+        .user_info button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+
+    </style>
+</head>
+<body>
+   <div class="title">
+        <h2>信息收集页面</h2>
+   </div>
+    <div class="user_info">
+        <p>注册账号：{{ reid }}</p><br>
+        <form method="post">
+            {% csrf_token %}
+            <!-- 姓名 -->
+            <label for="name">姓名:</label>
+            <input type="text" id="name" name="name" required>
+            <!-- 电话号码 -->
+            <label for="phone">电话号码(11位数字):</label>
+            <input type="tel" id="phone" name="phone" maxlength="11" minlength="11" pattern="[0-9]{11}" required>
+                    
+            <!-- 出生年月日 -->
+            <label for="birthdate">出生日期:</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+            
+            <!-- 学历 -->
+            <label for="education">学历:</label>
+            <select id="education" name="education" required>
+                <option value="">请选择</option>
+                <option value="无学历">无学历</option>
+                <option value="小学">小学</option>
+                <option value="初中">初中</option>
+                <option value="高中">高中</option>
+                <option value="本科">本科</option>
+                <option value="硕士">硕士</option>
+                <option value="博士">博士及以上</option>
+                <!-- <option value="博士后">博士后</option>
+                <option value="科研人员">教授或科研人员</option> -->
+            </select>
+            
+
+            <!-- 性别 -->
+            <label for="gender">性别:</label>
+            <select id="gender" name="gender" required>
+                <option value="">请选择</option>
+                <option value="male">男</option>
+                <option value="female">女</option>
+            </select>
+            
+            <!-- 锻炼频率 -->
+            <label for="exercise">锻炼频率:</label>
+            <select id="exercise" name="exercise" required>
+                <option value="">请选择</option>
+                <option value="不锻炼">不锻炼</option>
+                <option value="很少">很少</option>
+                <option value="偶尔">偶尔</option>
+                <option value="经常">经常</option>
+                <option value="频繁">频繁</option>
+            </select>
+            
+            <!-- 读写频率 -->
+            <label for="reading_writing">读写频率:</label>
+            <select id="reading_writing" name="reading_writing" required>
+                <option value="">请选择</option>
+                <option value="不读写">不读写</option>
+                <option value="很少">很少</option>
+                <option value="偶尔">偶尔</option>
+                <option value="经常">经常</option>
+                <option value="频繁">频繁</option>
+            </select>
+
+            <!-- 睡眠情况 -->
+            <label for="sleeping">睡眠情况:</label>
+            <select id="sleeping" name="sleeping" required>
+                <option value="">请选择</option>
+                <option value="少">&lt;6h</option>
+                <option value="良好">6-8h</option>
+                <option value="多">8-10h</option>
+                <option value="过多">&gt;10h</option>
+            </select>
+            <!-- 吸烟情况 -->
+            <label for="smoking">是否吸烟:</label>
+            <select id="smoking" name="smoking" required>
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+            </select>
+            <!-- 饮食健康 -->
+            <label for="diet">饮食是否健康:（饮食不健康包括但不限于：酗酒、过度摄入高脂肪或反式脂肪、高糖、高盐、加工食品、低纤维食品等等</label>
+            <select id="diet" name="diet" required>
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+            </select>
+
+            <!-- 居住环境 -->
+            <label for="living">居住环境污染:（环境污染包括但不限于：化学品污染、重金属污染、放射性物质污染、空气污染、噪音污染等等）</label>
+            <select id="living" name="living" required>
+                <option value="">请选择</option>
+                <option value="良好">环境良好</option>
+                <option value="轻度">轻度污染</option>
+                <option value="中度">中度污染</option>
+                <option value="重度">重度污染</option>
+            </select>
+
+            <!-- 工作环境 -->
+            <label for="working">工作环境污染:</label>
+            <select id="working" name="working" required>
+                <option value="">请选择</option>
+                <option value="良好">环境良好</option>
+                <option value="轻度">轻度污染</option>
+                <option value="中度">中度污染</option>
+                <option value="重度">重度污染</option>
+            </select>
+
+            <!-- 有无AD遗传病史 -->
+            <label for="ADhistory">有无AD遗传病史:</label>
+            <select id="ADhistory" name="ADhistory" required>
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+            </select>
+
+            <!-- 有无心血管疾病 -->
+            <label for="disease">有无心血管疾病:（心血管疾病包括但不限于：高血压、冠心病、中风、心力衰竭、心律失常、高胆固醇、糖尿病、动脉粥样硬化、代谢综合征等等）</label>
+            <select id="disease" name="disease" required>
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+            </select>
+
+            <!-- 有无脑外伤史 -->
+            <label for="TBI">有无脑外伤史:（脑外伤包括但不限于：脑震荡、脑刺伤、脑挫伤、血肿、颅骨骨折等等）</label>
+            <select id="TBI" name="TBI" required>
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+            </select>
+
+
+            <button type="submit">提交</button>
+        </form>
+    </div>
+</body>
+</html>

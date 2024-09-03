@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>注册页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script>
+        $(document).ready(function() {
+            {% if messages %}
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            {% endif %}
+        });
+    </script> -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .register-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color:rgb(105, 135, 179);
+            font-weight: 550;
+        }
+        h2 {
+            text-align: center;
+            color: rgb(139, 177, 230);
+            font-size: 30px;
+        }
+       
+        .register-container {
+            background-color: rgb(247, 248, 235);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        input[type="text"], input[type="password"], input[type="number"] {
+            width:100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%; /* 与输入框宽度保持一致 */
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            /* padding-right: 40px;  */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: rgb(139, 177, 230);
+            font-weight: 550;
+        }
+
+        /* 隐藏/显示密码按钮 */
+        .toggle-password {
+            position: absolute;
+            right: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .toggle-password {
+            width: 14%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: transparent;
+            color: rgb(139, 177, 230);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .radio-type {
+            display: flex;
+            justify-content: right;
+            /* margin: 8px 0; */
+            margin-bottom: 40px;
+
+        }
+        .radio-type label {
+            /* margin: 15px; */
+            font-size:14px;
+            font-weight:bold;
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            color: rgb(139, 177, 230); /* 设置标签颜色为蓝色 */
+            white-space: nowrap; 
+
+        }
+  
+        .radio-type label span {
+            margin-left: 5px;
+        }
+
+        .agreement {
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            /* margin: 15px 0; */
+            margin-right: 10px;
+            margin-top: 2px;
+
+        }
+        .agreement input {
+            width: 40px;
+
+        }
+        .agreement a {
+            font-size: smaller;
+            color: rgb(139, 177, 230);
+        }
+
+        .register_btn {
+            width: 35%;
+            /* height: 38px; */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            /* margin-top: 10px; */
+        }
+        
+        .register_btn:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="register-container" id="register">
+        <h2>注册</h2>
+        <form id="registerForm" method="post">
+            {% csrf_token %}
+            
+            <input type="text" id="id" name="re_id" value="{{ reid }}" placeholder="账号(推荐使用手机号)" required>
+            
+            <div class="password-wrapper">
+                <input type="password" id="re_password" name="re_password" placeholder="设置密码" required>
+                <!-- <input type="password" id="orpassword" name="orpassword" required> -->
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('re_password')">
+                    <i class="fa fa-eye"></i>
+                </button>
+                    
+            </div>
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="确认密码" required>
+                <!-- <input type="password" id="orpassword" name="orpassword" required> -->
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">
+                    <i class="fa fa-eye"></i>
+                </button>
+                    
+            </div>
+            <!-- <input type="password" id="password" name="re_password" placeholder="设置密码" required> -->
+            <!-- <input type="password" id="confirmPassword" name="confirmPassword" placeholder="确认密码" required> -->
+            <!-- <div class="radio-type">
+                <label>
+                    <input type="radio" name="reuser-type" value="admin" required> 管理员
+                </label>
+                <label>
+                    <input type="radio" name="reuser-type" value="user" required> 用户
+                </label>
+            </div> -->
+
+            <button class="register_btn" type="submit">注册</button>
+
+            <div class="agreement">
+                <input type="checkbox" id="agreement" required>
+                <label for="agreement"><a href="#">同意协议</a></label>
+            </div>
+        </form>
+
+        <!-- 账号已存在 -->
+        <div id="messages" style="display: none;">
+            {% if messages %}
+                {% for message in messages %}
+                    <span class="message" data-type="{{ message.tags }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#messages .message').each(function() {
+                // var messageType = $(this).data('type');
+                var messageText = $(this).text();
+                alert(messageText);
+            });
+        });
+
+        function togglePasswordVisibility(inputId) {
+            var input = document.getElementById(inputId);
+            var icon = input.nextElementSibling.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+    <script>
+        // document.getElementById('registerForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     var password = document.getElementById('password').value;
+        //     var confirmPassword = document.getElementById('confirmPassword').value;
+        //     if (password !== confirmPassword) {
+        //         alert('两次输入的密码不一致，请重新输入');
+        //         return;
+        //     }
+        //     // 这里可以添加处理表单提交的代码，例如通过 AJAX 将数据发送到服务器
+        //     alert('注册成功！');
+        // });
+
+    </script>
+    
+    </script>
+</body>
+</html>

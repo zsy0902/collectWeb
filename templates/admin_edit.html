@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>管理员修改密码</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            width: 40%;
+            background-color: rgb(247, 248, 235);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: rgb(139, 177, 230);
+            margin-bottom: 30px;
+            font-size: 30px;
+            text-align: center;
+        }
+        
+        /* 将表单容器居中并使标签和输入框水平排列 */
+        .form-group {
+            margin-bottom: 15px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 水平居中 */
+        }
+
+        /* 标签样式 */
+        .form-group label {
+            color: rgb(139, 177, 230);
+            text-align: right; /* 右对齐标签 */
+            margin-right: 10px;
+            width: 38%; /* 标签宽度，根据需要调整 */
+        }
+
+        /* 输入框样式 */
+        .form-group input {
+            width: 60%; /* 输入框宽度，根据需要调整 */
+            padding: 10px;
+            text-align: left; /* 输入框内容左对齐 */
+            border: none;
+            border-radius: 14px;
+            color: rgb(139, 177, 230);
+            font-weight: 550;
+        }
+/* 
+        .form-group-account .value {
+            font-size: larger;
+        } */
+        /* 隐藏/显示密码按钮的容器 */
+        .password-wrapper {
+            position: relative;
+            width: 60%; /* 与输入框宽度保持一致 */
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            width: 60%;
+            padding-right: 40px; /* 为按钮留出空间 */
+            border: 1px solid #ccc;
+            border-radius: 14px;
+            color: rgb(139, 177, 230);
+            font-weight: 550;
+        }
+
+        /* 隐藏/显示密码按钮 */
+        .toggle-password {
+            position: absolute;
+            right: 24%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .toggle-password {
+            width: 14%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: transparent;
+            color: rgb(139, 177, 230);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+
+        /* 按钮样式 */
+        .edit {
+            width: 100px;
+            padding: 10px;
+            border: none;
+            border-radius: 14px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel {
+            width: 100px;
+            padding: 10px;
+            border: none;
+            border-radius: 14px;
+            background-color: rgb(176, 180, 184);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10%;
+            margin-top: 20px;
+        }
+
+        .cancel:hover {
+            background-color: rgb(153, 155, 158);
+        }
+        .edit:hover {
+            background-color: rgb(102, 141, 201);
+        }
+
+        
+
+
+    </style>
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const formData = new FormData(document.getElementById("editForm"));
+            fetch('/admin_func/admin_edit/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken() // 添加 CSRF Token
+                },
+                body: formData
+            })
+            .then(response => response.json())  // 解析 JSON 响应
+           
+                });
+
+        $(document).ready(function() {
+            $('#messages .message').each(function() {
+                // var messageType = $(this).data('type');
+                var messageText = $(this).text();
+                alert(messageText);
+            });
+        });
+
+
+
+
+        function togglePasswordVisibility(inputId) {
+        var input = document.getElementById(inputId);
+        var icon = input.nextElementSibling.querySelector('i');
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+        
+
+        function cancelEdit() {
+            // 返回上一页
+            history.back();
+        }
+    </script>
+    
+</head>
+<body>
+    
+    <div class="container">
+        <h2>修改密码</h2>
+        <!-- <div class="form-group-account">
+            <label for="account">账号:</label>
+            <div class="value" id="value-account">{{ id }}</div>
+        </div> -->
+        <!-- <form id="pswForm" action="/user_func/mine/user_psw/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="orpassword">原始密码:</label>
+                <input type="password" id="orpassword" name="orpassword" required>
+            </div>
+
+            <div class="form-group">
+                <label for="re_password">设置密码:</label>
+                <input type="password" id="re_password" name="re_password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">确认密码:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">修改</button>
+            </div>
+            <div id="messages" style="display: none;">
+                {% if messages %}
+                    {% for message in messages %}
+                        <span class="message" data-type="{{ message.tags }}">{{ message }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </form> -->
+
+        <form id="editForm" action="/admin_func/admin_edit/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="hidden" value="{{ id }}">
+                <label for="orpassword">原始密码:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="orpassword" name="orpassword" required>
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('orpassword')">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <label for="re_password">设置密码:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="re_password" name="re_password" required>
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('re_password')">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <label for="confirm_password">确认密码:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm_password')">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <button class="edit" type="submit">修改</button>
+                <button class="cancel" type="button" onclick="cancelEdit()">取消</button>
+            </div>
+            <div id="messages" style="display: none;">
+                {% if messages %}
+                    {% for message in messages %}
+                        <span class="message" data-type="{{ message.tags }}">{{ message }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </form>
+        
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>个人中心</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            margin: 0;
+            padding: 20px;
+            /* display: flex; */
+            /* flex-direction: row; */
+        }
+        .mine a {
+           
+           font-size: medium;
+           margin-left: 94%;
+           font-weight: 500;
+           margin-bottom: 20px;
+           color: rgb(139, 177, 230);
+       }
+       .info_edit {
+        display: flex;
+        flex-direction: row;
+
+       }
+        .testhistory {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            /* margin-left: 5%; */
+            width: 30%;
+            margin-top: 80px;
+            font-size: large;
+            color: rgb(139, 177, 230);
+        }
+        .container {
+            width: 64%;
+            margin: 0 auto;
+            margin-right: 22%;
+            background-color: rgb(247, 248, 235);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: rgb(139, 177, 230);
+            margin-bottom: 40px;
+            font-size: 30px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-right: 28%;
+        }
+        .form-group label {
+            flex: 1;
+            margin-left: 40px;
+            /* margin: auto; */
+            margin-right: 10px;
+            color: #666;
+            text-align: right;
+        }
+        .form-group input, .form-group select {
+            flex: 2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: none;
+        }
+        .form-group .value {
+            flex: 2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            width: 40%;
+            /* height: 38px; */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgb(139, 177, 230);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            /* place-items: center; */
+            /* margin: auto; */
+            margin-top: 30px;
+            margin-left: 42%;
+            display: grid;
+        }
+        .form-group button:hover {
+            background-color: rgb(102, 141, 201);
+        }
+    </style>
+    <script>
+        let isEditing = false;
+
+        function toggleEditAll() {
+            const fields = ["username", "gender", "birthdate", "phone", "education", "exercise", "reading_writing","sleeping","smoking","diet","living","working","ADhistory","disease","TBI"];
+            const buttonElement = document.getElementById("edit-all-button");
+
+            fields.forEach(fieldId => {
+                const valueElement = document.getElementById(`value-${fieldId}`);
+                const inputElement = document.getElementById(fieldId);
+
+                if (!isEditing) { // Entering edit mode
+                    inputElement.value = valueElement.textContent.trim();
+                    inputElement.style.display = 'block';
+                    valueElement.style.display = 'none';
+                } else { // Saving changes
+                    valueElement.textContent = inputElement.value || inputElement.options[inputElement.selectedIndex].text;
+                    inputElement.style.display = 'none';
+                    valueElement.style.display = 'block';
+                }
+            });
+
+            isEditing = !isEditing;
+            buttonElement.textContent = isEditing ? '保存' : '修改';
+
+            if (!isEditing) { // Save changes
+                saveProfile();
+            }
+        }
+
+        function saveProfile() {
+            const formData = new FormData();
+            const fields = ["username", "gender", "birthdate", "phone", "education", "exercise", "reading_writing","sleeping","smoking","diet","living","working","ADhistory","disease","TBI"];
+            fields.forEach(fieldId => {
+                const inputElement = document.getElementById(fieldId);
+                formData.append(fieldId, inputElement.value);
+            });
+
+            fetch(window.location.pathname, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            // .then(data => {
+            alert('保存成功!');
+
+            //     if (data.status === 'success') {
+            //         alert('保存成功!');
+            //     } else {
+            //         alert('保存失败!');
+            //         console.log(data.errors);
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     alert('保存失败!');
+            // });
+        }
+    </script>
+</head>
+<body>
+    <div class="mine">
+        <!-- <p id="name">{{ id }}</p> -->
+        <a href="user_psw">修改密码</a>
+    </div>
+    <div class="info_edit">
+        <div class="testhistory">
+            <p>据图描述测试历史时间:
+                {% for item in test_date_l %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </p>
+            <p>MMSE问卷测试历史时间:
+                {% for item in test_date_l2 %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </p>
+        </div>
+        <div class="container">
+            <h2>个人中心</h2>
+            <div class="form-group">
+                <label for="account">账号:</label>
+                <div class="value" id="value-account">{{ id }}</div>
+            </div>
+            <form id="editForm" action="/user_func/mine/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">姓名:</label>
+                    <div class="value" id="value-username">{{ name }}</div>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">性别:</label>
+                    <div class="value" id="value-gender">{{ gender }}</div>
+                    <select id="gender" name="gender" required>
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="education">学历:</label>
+                    <div class="value" id="value-education">{{ education }}</div>
+                    <select id="education" name="education" required>
+                        <option value="">请选择</option>
+                        <option value="无学历">无学历</option>
+                        <option value="小学">小学</option>
+                        <option value="初中">初中</option>
+                        <option value="高中">高中</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                        <option value="博士后">博士后</option>
+                        <option value="科研人员">教授或科研人员</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone">电话(11位数字):</label>
+                    <div class="value" id="value-phone">{{ phone }}</div>
+                    <input type="tel" id="phone" name="phone" maxlength="11" minlength="11" pattern="[0-9]{11}" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">出生日期:</label>
+                    <div class="value" id="value-birthdate">{{ birth }}</div>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="exercise">锻炼频率:</label>
+                    <div class="value" id="value-exercise">{{ exercise }}</div>
+                    <select id="exercise" name="exercise" required>
+                        <option value="">请选择</option>
+                        <option value="不锻炼">不锻炼</option>
+                        <option value="很少">很少</option>
+                        <option value="偶尔">偶尔</option>
+                        <option value="经常">经常</option>
+                        <option value="频繁">频繁</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reading_writing">读写频率:</label>
+                    <div class="value" id="value-reading_writing">{{ readnwrite }}</div>
+                    <select id="reading_writing" name="reading_writing" required>
+                        <option value="">请选择</option>
+                        <option value="不读写">不读写</option>
+                        <option value="很少">很少</option>
+                        <option value="偶尔">偶尔</option>
+                        <option value="经常">经常</option>
+                        <option value="频繁">频繁</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sleeping">睡眠情况:</label>
+                    <div class="value" id="value-sleeping">{{ sleeping }}</div>
+                    <select id="sleeping" name="sleeping" required>
+                        <option value="">请选择</option>
+                        <option value="少">&lt;6h</option>
+                        <option value="良好">6-8h</option>
+                        <option value="多">8-10h</option>
+                        <option value="过多">&gt;10h</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="smoking">是否吸烟:</label>
+                    <div class="value" id="value-smoking">{{ smoking }}</div>
+                    <select id="smoking" name="smoking" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+    
+                <div class="form-group">
+                    <label for="diet">饮食是否健康:</label>
+                    <div class="value" id="value-diet">{{ diet }}</div>
+                    <select id="diet" name="diet" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>  
+                </div>
+    
+                <div class="form-group">
+                    <label for="living">居住环境污染:</label>
+                    <div class="value" id="value-living">{{ living }}</div>
+                    <select id="living" name="living" required>
+                        <option value="">请选择</option>
+                        <option value="良好">环境良好</option>
+                        <option value="轻度">轻度污染</option>
+                        <option value="中度">中度污染</option>
+                        <option value="重度">重度污染</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="working">工作环境污染:</label>
+                    <div class="value" id="value-working">{{ working }}</div>
+                    <select id="working" name="working" required>
+                        <option value="">请选择</option>
+                        <option value="良好">环境良好</option>
+                        <option value="轻度">轻度污染</option>
+                        <option value="中度">中度污染</option>
+                        <option value="重度">重度污染</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="ADhistory">有无AD遗传病史:</label>
+                    <div class="value" id="value-ADhistory">{{ ADhistory }}</div>
+                    <select id="ADhistory" name="ADhistory" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="disease">有无心血管疾病:</label>
+                    <div class="value" id="value-disease">{{ disease }}</div>
+                    <select id="disease" name="disease" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="TBI">有无脑外伤史:</label>
+                    <div class="value" id="value-TBI">{{ TBI }}</div>
+                    <select id="TBI" name="TBI" required>
+                        <option value="">请选择</option>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+    
+    
+                <div class="form-group">
+                    <button type="button" id="edit-all-button" onclick="toggleEditAll()">修改</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户详情</title>
+    <style>
+        body {
+            background-color: #fafce0;
+            /* display: flex;
+            flex-direction: row; */
+        }
+        table {
+            width: 60%;
+            /* margin-top: 7%; */
+            /* margin-left: 10%; */
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #f7f8eb;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: center;
+            color: #365b8f;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+
+        h1 {
+            color: rgb(139, 177, 230);
+            margin-bottom: 30px;
+            margin-top: 52px;
+            /* font-size: 30px; */
+            text-align: center;
+        }
+       
+    </style>
+</head>
+<body>
+    
+    <h1>用户详情</h1>
+    
+    <table border="1">
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>账号</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.id }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>姓名</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.name }}</td>
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>性别</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.gender }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>电话</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.phonenumber }}</td>
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>学历</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.education }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>出生日期</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.age }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>锻炼频率</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.workout }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>读写频率</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.readnwrite }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>睡眠情况</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.sleeping }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>是否吸烟</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.smoking }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>饮食是否健康</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.diet }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>居住环境污染</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.living }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>工作环境污染</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.working }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>有无AD遗传病史</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.ADhistory }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>有无心血管疾病</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.disease }}</td>
+            <td style="color: rgb(54, 91, 143);"><strong>有无脑外伤史</strong></td>
+            <td style="color: rgb(139, 177, 230);">{{ user.TBI }}</td>
+            
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>看图描述测试时间记录</strong></td>
+            <td style="color: rgb(139, 177, 230);" colspan="3">
+                {% for test1 in test_date %}
+                {{ test1 }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td style="color: rgb(54, 91, 143);"><strong>MMSE问卷测试时间记录</strong></td>
+            <td style="color: rgb(139, 177, 230);" colspan="3">
+                {% for test2 in test_date2 %}
+                {{ test2 }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    
+
+</body>
+</html>
+
+

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传测试数据</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafce0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h2 {
+            color: rgb(139, 177, 230);
+            text-align: center;
+            
+        }
+        /* h3 {
+            color: #333;
+        } */
+        .upload_set {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            align-items: center;
+            gap: 15px;
+            width: 50%;
+        
+        }
+        .upload-section {
+            background-color: #f7f8eb;
+            padding: 18px;
+            width: 72%;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            flex: 1;
+            /* width: 60%; */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* .upload-link {
+            margin-right: 20px;
+        }
+
+        .upload-section:last-child .upload-link {
+            margin-right: 0;
+        } */
+        a {
+            color: rgb(139, 177, 230);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            /* width: 100%;
+            height: 100%; */
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 14%;
+            width: 100%;
+            align-items: center;
+            height: 100%;
+        }
+        .modal2 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            /* width: 100%;
+            height: 100%; */
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            /* padding-top: 14%; */
+            width: 100%;
+            /* align-items: center; */
+            height: 100%;
+        }
+        .modal h3, .modal2 h3 {
+            color: rgb(139, 177, 230);
+            text-align: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 4% auto;
+            padding: 20px;
+            /* align-items: center; */
+            border: 1px solid #888;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+        .modal label, .modal2 label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 520;
+            font-size: 15px;
+            color: rgb(75, 92, 113);
+        }
+
+        .modal input[type="text"], .modal2 input[type="text"] {
+            width: 100%;
+            /* align-items: center; */
+
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #84858a;
+            box-sizing: border-box;
+        }
+        .modal button, .modal2 button {
+            padding: 8px 30px;
+            font-size: 14px;
+            border: none;
+            background-color: rgb(139, 177, 230);
+            color: rgb(255, 255, 255);
+            /* margin: 0 30px; */
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-left: 40%;
+            cursor: pointer;
+        }
+
+        .close, .close2 {
+            color: rgb(139, 177, 230);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus, .close2:hover,
+        .close2:focus {
+            color: rgb(63, 95, 142);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            max-width: 350px;
+            gap: 15px;
+            
+            /* text-align: center; */
+        }
+        .radio-group label {
+            display: flex;
+            margin-left: 10%;
+            align-items: center;
+            /* gap: 5px; */
+        }
+        .radio-group input {
+            display: none;
+        }
+        .radio-group label::before {
+            content: '';
+            display: inline-block;
+            border-radius: 50%;
+            border: 2px solid rgb(139, 177, 230);
+            /* margin-right: 5px; */
+            /* margin: 15px; */
+        }
+        .radio-group label:nth-of-type(6)::before { width: 40px; height: 40px; }
+        .radio-group label:nth-of-type(5)::before { width: 30px; height: 30px; }
+        .radio-group label:nth-of-type(4)::before { width: 25px; height: 25px; }
+        .radio-group label:nth-of-type(3)::before { width: 20px; height: 20px; }
+        .radio-group label:nth-of-type(2)::before { width: 15px; height: 15px; }
+        .radio-group label:nth-of-type(1)::before { width: 10px; height: 10px; }
+        .radio-group input:checked + label::before {
+            background-color: rgb(139, 177, 230);
+        }
+        .radio-group input:checked + label::after {
+            opacity: 1;
+        }
+        .radio-group label span {
+            display: block;
+            margin-left: 5px;
+            margin-top: 5px;
+            font-size: 14px;
+            color: rgb(139, 177, 230);
+        }
+
+
+
+
+        .popup-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(165, 190, 223);
+            color: white;
+            padding: 15px;
+            width: 150px;
+            border-radius: 15px;
+            z-index: 1000;
+            font-weight: 550;
+            font-size: 16px;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 1s ease-in-out; /* 添加过渡效果 */
+        }
+        
+        .popup-message.fade-out {
+            opacity: 0; /* 设置为完全透明 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- <h1>上传测试数据</h1> -->
+
+    <!-- 上部分：上传测试一结果数据 -->
+    <div class="upload_set">
+        <div class="upload-section">
+            <h2><a href="#" id="openModal" class="upload-link">上传看图叙述测试结果数据</a></h2>
+            <!-- <p>点击上面的链接，在弹出框中上传测试一的结果数据。</p> -->
+        </div>
+    
+        <!-- 下部分：上传测试二结果数据 -->
+        <div class="upload-section">
+            <h2><a href="#" id="openModal2">上传MMSE问卷测试结果数据</a></h2>
+
+            <!-- <p>点击上面的链接，上传测试二的结果数据。</p> -->
+        </div>
+    </div>
+
+    <!-- Modal for Test 1 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>上传看图叙述测试结果数据</h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="test_type" value="test1">
+                <div class="test1_up" style="display: flex; flex-direction: row; gap: 22px; justify-content: space-between; margin-top: 30px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <label for="test_date">测试日期:</label>
+                        <input type="date" id="test_date" name="test_date" required><br><br>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <label for="audio_file">录音文件(.wav/.mp3):</label>
+                        <input type="file" id="audio_file" name="audio_file" required><br><br>
+                    </div>
+                </div>
+                <button type="submit">上传</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal for Test 2 -->
+    <div id="myModal2" class="modal2">
+        <div class="modal-content">
+            <span class="close2">&times;</span>
+            <h2>上传MMSE问卷测试结果数据</h2>
+            <form action="" method="POST" class="form1" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="test_type" value="test2">
+                <div class="test2_up" style="display: flex; flex-direction: row; gap: 22px; justify-content: space-between; margin-top: 34px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <label for="test_date2">测试日期:</label>
+                        <input type="date" id="test_date2" name="test_date2" required><br><br>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <label for="audio_file2">录音文件(.wav/.mp3):</label>
+                        <input type="file" id="audio_file2" name="audio_file2" required><br><br>
+                    </div>
+                </div>
+
+                <h3>定向力</h3>
+                <div>
+                    <label for="date">1. 今天的日期（年份、季节、月份、日期、星期几）:</label>
+                    <!-- <select id="date" name="date_score" required>
+                        <option value="">评分</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                    </select> -->
+                    <div class="radio-group">
+                        <input type="radio" id="date_score_0" name="date_score" value="0">
+                        <label for="date_score_0"><span>0</span></label>
+                        <input type="radio" id="date_score_1" name="date_score" value="1">
+                        <label for="date_score_1"><span>1</span></label>
+                        <input type="radio" id="date_score_2" name="date_score" value="2">
+                        <label for="date_score_2"><span>2</span></label>
+                        <input type="radio" id="date_score_3" name="date_score" value="3">
+                        <label for="date_score_3"><span>3</span></label>
+                        <input type="radio" id="date_score_4" name="date_score" value="4">
+                        <label for="date_score_4"><span>4</span></label>
+                        <input type="radio" id="date_score_5" name="date_score" value="5" required>
+                        <label for="date_score_5"><span>5</span></label>
+                    </div>
+
+
+                    <!-- <input type="text" id="date_detail" name="date_detail" required> -->
+                </div>
+                <div>
+                    <label for="place">2. 您现在在哪里（国家、城市、医院、楼层、房间）:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="place_score_0" name="place_score" value="0">
+                        <label for="place_score_0"><span>0</span></label>
+                        <input type="radio" id="place_score_1" name="place_score" value="1">
+                        <label for="place_score_1"><span>1</span></label>
+                        <input type="radio" id="place_score_2" name="place_score" value="2">
+                        <label for="place_score_2"><span>2</span></label>
+                        <input type="radio" id="place_score_3" name="place_score" value="3">
+                        <label for="place_score_3"><span>3</span></label>
+                        <input type="radio" id="place_score_4" name="place_score" value="4">
+                        <label for="place_score_4"><span>4</span></label>
+                        <input type="radio" id="place_score_5" name="place_score" value="5" required>
+                        <label for="place_score_5"><span>5</span></label>
+                    </div>
+                    <!-- <input type="text" id="place_detail" name="place_detail" placeholder="备注" required> -->
+                </div>
+                <!-- 记忆力 -->
+                <h3>记忆力</h3>
+                <div>
+                    <label for="registration">3. 请重复一遍并记住以下三个词（例如：苹果、椅子、钱币），待会会问您:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="registration_score_0" name="registration_score" value="0">
+                        <label for="registration_score_0"><span>0</span></label>
+                        <input type="radio" id="registration_score_1" name="registration_score" value="1">
+                        <label for="registration_score_1"><span>1</span></label>
+                        <input type="radio" id="registration_score_2" name="registration_score" value="2">
+                        <label for="registration_score_2"><span>2</span></label>
+                        <input type="radio" id="registration_score_3" name="registration_score" value="3" required>
+                        <label for="registration_score_3"><span>3</span></label>
+                    </div>
+
+                    <!-- <input type="text" id="memory_detail" name="memory_detail" placeholder="备注" required> -->
+
+                </div>
+                <!-- 注意力和计算力 -->
+                <h3>注意力和计算力</h3>
+                <div>
+                    <label for="attention_calculation">4. 从100开始连续减去7，减5次:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="attention_calculation_score_0" name="attention_calculation_score" value="0">
+                        <label for="attention_calculation_score_0"><span>0</span></label>
+                        <input type="radio" id="attention_calculation_score_1" name="attention_calculation_score" value="1">
+                        <label for="attention_calculation_score_1"><span>1</span></label>
+                        <input type="radio" id="attention_calculation_score_2" name="attention_calculation_score" value="2">
+                        <label for="attention_calculation_score_2"><span>2</span></label>
+                        <input type="radio" id="attention_calculation_score_3" name="attention_calculation_score" value="3">
+                        <label for="attention_calculation_score_3"><span>3</span></label>
+                        <input type="radio" id="attention_calculation_score_4" name="attention_calculation_score" value="4">
+                        <label for="attention_calculation_score_4"><span>4</span></label>
+                        <input type="radio" id="attention_calculation_score_5" name="attention_calculation_score" value="5" required>
+                        <label for="attention_calculation_score_5"><span>5</span></label>
+                    </div>
+                    <!-- <input type="text" id="attention_calculation_detail" name="attention_calculation_detail" placeholder="备注" required> -->
+                </div>
+                <!-- 回忆能力 -->
+                <h3>回忆能力</h3>
+                <div>
+                    <label for="recall">5. 请回忆之前让您记住的那三个词:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="recall_score_0" name="recall_score" value="0">
+                        <label for="recall_score_0"><span>0</span></label>
+                        <input type="radio" id="recall_score_1" name="recall_score" value="1">
+                        <label for="recall_score_1"><span>1</span></label>
+                        <input type="radio" id="recall_score_2" name="recall_score" value="2">
+                        <label for="recall_score_2"><span>2</span></label>
+                        <input type="radio" id="recall_score_3" name="recall_score" value="3" required>
+                        <label for="recall_score_3"><span>3</span></label>
+                    </div>
+                    <!-- <input type="text" id="recall_detail" name="recall_detail" placeholder="备注" required> -->
+                </div>
+                <!-- 命名能力 -->
+                <h3>命名能力</h3>
+                <div>
+                    <label for="language">6. 请命名以下物品（例如：铅笔和手表）:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="language_score_0" name="language_score" value="0">
+                        <label for="language_score_0"><span>0</span></label>
+                        <input type="radio" id="language_score_1" name="language_score" value="1">
+                        <label for="language_score_1"><span>1</span></label>
+                        <input type="radio" id="language_score_2" name="language_score" value="2" required>
+                        <label for="language_score_2"><span>2</span></label>
+                    </div>
+                    <!-- <input type="text" id="language_detail" name="language_detail" placeholder="备注" required> -->
+                </div>
+                <!-- 复述能力 -->
+                <h3>复述能力</h3>
+                <div>
+                    <label for="repeat">7. 请跟着重复一句话（例如：“四十四只石狮子”）:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="repeat_score_0" name="repeat_score" value="0">
+                        <label for="repeat_score_0"><span>0</span></label>
+                        <input type="radio" id="repeat_score_1" name="repeat_score" value="1" required>
+                        <label for="repeat_score_1"><span>1</span></label>
+                    </div>
+
+                    <!-- <input type="text" id="repeat_detail" name="repeat_detail" placeholder="备注" required> -->
+                </div>
+                <!-- 语言能力 -->
+                <h3>语言能力</h3>
+                <div>
+                    <label for="three_stage_command">8. 按指令进行三步操作（例如：“请拿起纸，用右手折叠，把纸放在桌子上”）:</label>
+                    <div class="radio-group">
+                        
+                        <input type="radio" id="command_score_0" name="command_score" value="0">
+                        <label for="command_score_0"><span>0</span></label>
+                        <input type="radio" id="command_score_1" name="command_score" value="1">
+                        <label for="command_score_1"><span>1</span></label>
+                        <input type="radio" id="command_score_2" name="command_score" value="2">
+                        <label for="command_score_2"><span>2</span></label>
+                        <input type="radio" id="command_score_3" name="command_score" value="3" required>
+                        <label for="command_score_3"><span>3</span></label>
+                    </div>
+                </div>
+                <div>
+                    <label for="reading">9. 请念出这一句话并按要求操作（例如：“请闭上眼睛”）:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="reading_score_0" name="reading_score" value="0">
+                        <label for="reading_score_0"><span>0</span></label>
+                        <input type="radio" id="reading_score_1" name="reading_score" value="1" required>
+                        <label for="reading_score_1"><span>1</span></label>
+                    </div>
+                </div>
+                <div>
+                    <label for="writing">10. 请写一句完整的句子:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="writing_score_0" name="writing_score" value="0">
+                        <label for="writing_score_0"><span>0</span></label>
+                        <input type="radio" id="writing_score_1" name="writing_score" value="1" required>
+                        <label for="writing_score_1"><span>1</span></label>
+                    </div>
+                </div>
+                <div>
+                    <label for="drawing">11. 请按照样例画出图形:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="drawing_score_0" name="drawing_score" value="0">
+                        <label for="drawing_score_0"><span>0</span></label>
+                        <input type="radio" id="drawing_score_1" name="drawing_score" value="1" required>
+                        <label for="drawing_score_1"><span>1</span></label>
+                    </div>
+                    <input type="text" id="drawing_detail" name="drawing_detail" placeholder="备注" required>
+
+                </div>
+
+
+
+
+                <button type="submit">上传</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="popup-message" id="popupMessage">
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+
+        function showPopupMessage() {
+            var popup = document.getElementById("popupMessage");
+            popup.style.display = "block";
+            setTimeout(function() {
+                popup.classList.add("fade-out"); // 添加淡出效果
+            }, 2000); // 2秒后开始淡出
+            setTimeout(function() {
+                popup.style.display = "none";
+                popup.classList.remove("fade-out"); // 重置类，以便下次可以再次使用淡出效果
+            }, 3000); // 3秒后完全消失
+        }
+
+
+
+
+
+
+
+
+        // Get modal element
+        var modal = document.getElementById("myModal");
+        var modal2 = document.getElementById("myModal2");
+
+        // Get open modal button
+        var btn = document.getElementById("openModal");
+        var btn2 = document.getElementById("openModal2");
+
+        // Get close button
+        var span = document.getElementsByClassName("close")[0];
+        var span2 = document.getElementsByClassName("close2")[0];
+        function outsideWin(modal){
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+        // Listen for open click
+        // btn.onclick = function() {
+        //     modal.style.display = "block";
+        // }
+
+        btn.addEventListener('click', function() {
+            modal.style.display = "block";
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            outsideWin(modal);
+        });
+
+        // Listen for close click
+        
+
+        // Listen for outside click
+        
+
+
+        btn2.addEventListener('click', function() {
+            modal2.style.display = "block";
+            span2.onclick = function() {
+                modal2.style.display = "none";
+            }
+            outsideWin(modal2);
+        });
+        
+
+
+        // Listen for open click
+        // btn2.onclick = function() {
+        //     modal2.style.display = "block";
+        // }
+        // // Listen for close click
+        // span2.onclick = function() {
+        //     modal2.style.display = "none";
+        // }
+        // // Listen for outside click
+        // window.onclick = function(event) {
+        //     if (event.target == modal2) {
+        //         modal2.style.display = "none";
+        //     }
+        // }
+    </script>
+
+    {% if messages %}
+    <script>
+        showPopupMessage();
+    </script>
+    {% endif %}
+
+</body>
+</html>
